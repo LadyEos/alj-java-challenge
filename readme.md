@@ -45,8 +45,19 @@ Application (with the embedded H2 database) is ready to be used ! You can access
 
 #### Your experience in Java
 
-Please let us know more about your Java experience in a few sentences. For example:
+Please let us know more about your Java experience in a few sentences:
 
-- I have 3 years experience in Java and I started to use Spring Boot from last year
-- I'm a beginner and just recently learned Spring Boot
-- I know Spring Boot very well and have been using it for many years
+- I've been using java for a long time (more than 10 years) but most of my experience is in java 7 & 8, although I've been using Grails for almost 5 years
+- Started learning and using Spring Boot last November
+
+#### Additional Comments
+
+- Added validations to the API calls 
+- Added error handling
+- Since the database implementation is on memory, added a library to simulate the database for the tests
+- Things left to do because I ran out of time:
+  - Authentication Implementation: Ran into an obscure error with Springfox swagger and Spring Basic Auth, that took too long to resolve, so it was removed.
+  - Return a success message for save, delete, and update calls
+  - Modify the validators to not have repeated classes
+  
+

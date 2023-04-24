@@ -1,42 +1,47 @@
 package jp.co.axa.apidemo.services;
 
 import jp.co.axa.apidemo.entities.Employee;
+import jp.co.axa.apidemo.exceptions.BadRequestException;
 import jp.co.axa.apidemo.repositories.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService{
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    public void setEmployeeRepository(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
+    private final EmployeeRepository employeeRepository;
 
     public List<Employee> retrieveEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
-        return employees;
+        return employeeRepository.findAll();
     }
 
     public Employee getEmployee(Long employeeId) {
         Optional<Employee> optEmp = employeeRepository.findById(employeeId);
-        return optEmp.get();
+        return optEmp.orElseThrow(()-> new BadRequestException("Employee does not exist"));
     }
 
+    @Transactional
     public void saveEmployee(Employee employee){
         employeeRepository.save(employee);
     }
 
+    @Transactional
     public void deleteEmployee(Long employeeId){
-        employeeRepository.deleteById(employeeId);
+        Employee employee = getEmployee(employeeId);
+        employeeRepository.delete(employee);
     }
 
+    @Transactional
     public void updateEmployee(Employee employee) {
-        employeeRepository.save(employee);
+        Optional<Employee> optEmp = employeeRepository.findById(employee.getId());
+        if(optEmp.isPresent())
+            employeeRepository.save(employee);
+        else
+            throw new BadRequestException("Employee does not exist");
     }
 }
